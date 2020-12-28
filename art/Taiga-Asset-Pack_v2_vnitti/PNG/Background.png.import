@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/Background.png-924eff2ac5c7ec903feb302b7a237e8c.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://art/Taiga-Asset-Pack_v2_vnitti/PNG/Background.png"
+dest_files=[ "res://.import/Background.png-924eff2ac5c7ec903feb302b7a237e8c.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

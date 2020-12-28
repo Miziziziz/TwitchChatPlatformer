@@ -1,0 +1,102 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ui/UIFont.tres" type="DynamicFont" id=1]
+
+[sub_resource type="Gradient" id=5]
+colors = PoolColorArray( 1, 0.978516, 0, 1, 1, 0.158203, 0, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+emission_shape = 1
+emission_sphere_radius = 2.16
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 50, 0 )
+initial_velocity = 120.0
+initial_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+scale = 8.27
+scale_random = 0.95
+color_ramp = SubResource( 6 )
+
+[sub_resource type="Gradient" id=7]
+colors = PoolColorArray( 0, 0.179688, 1, 1, 0.875, 0, 1, 1 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+emission_shape = 1
+emission_sphere_radius = 2.16
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 50, 0 )
+initial_velocity = 120.0
+initial_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+scale = 8.27
+scale_random = 0.95
+color_ramp = SubResource( 8 )
+
+[node name="FireWorks" type="Node2D"]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 1, 0.921569, 0, 1 )
+margin_left = -24.0
+margin_top = -24.0
+margin_right = 20.0
+margin_bottom = -5.0
+custom_fonts/font = ExtResource( 1 )
+text = "Winner"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="Label"]
+one_shot = true
+autostart = true
+
+[node name="Particles2D" type="Particles2D" parent="."]
+emitting = false
+amount = 32
+lifetime = 3.0
+one_shot = true
+speed_scale = 6.0
+explosiveness = 0.81
+process_material = SubResource( 3 )
+
+[node name="Timer" type="Timer" parent="Particles2D"]
+wait_time = 0.001
+one_shot = true
+autostart = true
+
+[node name="Particles2D2" type="Particles2D" parent="."]
+emitting = false
+amount = 32
+lifetime = 3.0
+one_shot = true
+speed_scale = 6.0
+explosiveness = 0.81
+process_material = SubResource( 4 )
+
+[node name="Timer" type="Timer" parent="Particles2D2"]
+wait_time = 0.1
+one_shot = true
+autostart = true
+[connection signal="timeout" from="Timer" to="." method="queue_free"]
+[connection signal="timeout" from="Label/Timer" to="Label" method="hide"]
+[connection signal="timeout" from="Particles2D/Timer" to="Particles2D" method="restart"]
+[connection signal="timeout" from="Particles2D2/Timer" to="Particles2D2" method="restart"]
