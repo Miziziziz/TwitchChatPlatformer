@@ -1,11 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://art/Monsters_Creatures_Fantasy/Mushroom/Run.png" type="Texture" id=2]
-[ext_resource path="res://art/Monsters_Creatures_Fantasy/Mushroom/Idle.png" type="Texture" id=3]
+[ext_resource path="res://Player/skins/skeleton.png" type="Texture" id=2]
 [ext_resource path="res://ui/UIFont.tres" type="DynamicFont" id=4]
-[ext_resource path="res://art/Monsters_Creatures_Fantasy/Goblin/Run.png" type="Texture" id=5]
-[ext_resource path="res://art/Monsters_Creatures_Fantasy/Goblin/Idle.png" type="Texture" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 16 )
@@ -15,76 +12,16 @@ resource_name = "idle"
 length = 0.4
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Character1/Idle:visible")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Character1/Idle:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 0, 1, 2, 3 ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Character1/Jump:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Character2/Idle:frame")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3 ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Character2/Idle:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("Character2/Sprite:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -92,7 +29,7 @@ resource_name = "jump"
 length = 0.4
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Character1/Idle:visible")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -101,46 +38,12 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Character1/Jump:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Character2/Sprite:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Character2/Idle:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
+"values": [ 4 ]
 }
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"instanced",
+]]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource( 1 )
@@ -170,27 +73,11 @@ autoplay = "idle"
 anims/idle = SubResource( 2 )
 anims/jump = SubResource( 3 )
 
-[node name="Character1" type="Node2D" parent="Graphics"]
-visible = false
-
-[node name="Idle" type="Sprite" parent="Graphics/Character1"]
-visible = false
-texture = ExtResource( 3 )
-hframes = 4
-
-[node name="Jump" type="Sprite" parent="Graphics/Character1"]
+[node name="Sprite" type="Sprite" parent="Graphics"]
 texture = ExtResource( 2 )
-hframes = 8
-frame = 7
+hframes = 5
 
-[node name="Character2" type="Node2D" parent="Graphics"]
-
-[node name="Idle" type="Sprite" parent="Graphics/Character2"]
-visible = false
-texture = ExtResource( 6 )
-hframes = 4
-
-[node name="Sprite" type="Sprite" parent="Graphics/Character2"]
-texture = ExtResource( 5 )
-hframes = 8
-frame = 4
+[node name="AfkTimer" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+[connection signal="timeout" from="AfkTimer" to="." method="died"]

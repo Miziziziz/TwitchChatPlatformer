@@ -3,8 +3,6 @@ extends Gift
 onready var player_obj = preload("res://Player/Player.tscn")
 var all_players = {}
 var players_who_won = {}
-const MAX_PLAYERS = 20
-const CANT_REJOIN_FOR_TIME = 10.0
 
 onready var player_counter = $CanvasLayer/PlayerCounter
 onready var player_died_display = $CanvasLayer/DeathDisplay
@@ -18,49 +16,62 @@ func _ready() -> void:
 	# You will have to either get a oauth token yourself or use
 	# https://twitchapps.com/tokengen/
 	# to generate a token with custom scopes.
-	var file = File.new()
-	file.open("res://config.json", file.READ)
-	var dict = parse_json(file.get_as_text())
-	file.close()
+#	var file = File.new()
+#	file.open("res://config.json", file.READ)
+#	var dict = parse_json(file.get_as_text())
+#	file.close()
 	
-	authenticate_oauth(dict.account_name, dict.oauth_token)
+	authenticate_oauth(SettingsManager.account_name, SettingsManager.oauth_token)
 	if(yield(self, "login_attempt") == false):
 	  print("Invalid username or token.")
 	  return
-	join_channel(dict.channel_name)
+	join_channel(SettingsManager.channel_name)
 	for winzone in get_tree().get_nodes_in_group("winzone"):
 		winzone.connect("player_won", self, "add_winning_player")
 
 func parse_chat_input(sender_data: SenderData, message: String):
 	message = message.to_lower()
-	if message.begins_with("join") and !sender_data.user in all_players and all_players.size() < MAX_PLAYERS and !player_died_recently(sender_data.user):
-		add_new_player(sender_data.user)
+	if message.begins_with("join") and !sender_data.user in all_players and (sender_data.user == SettingsManager.channel_name or\
+			 (all_players.size() < SettingsManager.max_players and !player_died_recently(sender_data.user))):
+		var msg = message.split(" ")
+		var skin_index = -1
+		if msg.size() > 1 and msg[1].is_valid_integer():
+			skin_index = int(msg[1])
+		add_new_player(sender_data.user, skin_index)
+	elif message.begins_with("exit"):
+		remove_player(sender_data.user)
 	elif sender_data.user in all_players:
 		if message.begins_with("reset"):
 			reset_player(sender_data.user)
 		else:
 			run_player_command(sender_data.user, message)
 
-func add_new_player(player_name: String):
+func _process(delta):
+	if Input.is_action_just_pressed("exit"):
+		SettingsManager.load_main_menu()
+
+func add_new_player(player_name: String, skin_index=-1):
 	var player_inst = player_obj.instance()
 	get_tree().get_root().add_child(player_inst)
 	player_inst.global_position = get_node("../StartPoint").global_position
 	all_players[player_name] = player_inst
 	player_inst.set_player_name(player_name)
+	player_inst.set_skin(skin_index)
 	if player_name in players_who_won:
 		player_inst.set_won()
-	player_inst.connect("died", self, "remove_player")
+	player_inst.connect("died", self, "kill_player")
 	update_player_counter()
 
 func reset_player(player_name: String):
 	all_players[player_name].global_position = get_node("../StartPoint").global_position
+	all_players[player_name].reset()
 
 func run_player_command(player_name: String, player_command: String):
 	var player_ref : Player = all_players[player_name]
 	var jump_right = false
 	var jump_power = 1
 	
-	var p_c = player_command.split("_")
+	var p_c = player_command.split(" ")
 	
 	if p_c.size() >= 2:
 		var first_char : String = p_c[0]
@@ -75,31 +86,44 @@ func run_player_command(player_name: String, player_command: String):
 			jump_power = int(p_c[1])
 		else:
 			return
-		player_ref.jump(jump_right, jump_power)
+		player_ref.add_to_jump_queue(jump_right, jump_power)
+	if p_c.size() > 2:
+		p_c.remove(0)
+		p_c.remove(0)
+		var new_cmd = ""
+		for s in p_c:
+			new_cmd += s + " "
+		run_player_command(player_name, new_cmd)
 
 var dead_players = {}
+func kill_player(player_name: String):
+	remove_player(player_name)
+	player_died_display.say_player_died(player_name)
+
 func remove_player(player_name: String):
+	if !player_name in all_players:
+		print('error player missing ', player_name)
+		return
 	var player_ref: Player = all_players[player_name]
-	player_ref.disconnect("died", self, "remove_player")
+	#player_ref.disconnect("died", self, "remove_player")
 	player_ref.queue_free()
 	all_players.erase(player_name)
 	dead_players[player_name] = OS.get_ticks_msec() / 1000.0
 	update_player_counter()
-	player_died_display.say_player_died(player_name)
 
 func player_died_recently(player_name: String):
 	if !player_name in dead_players:
 		return false
-	if MAX_PLAYERS - all_players.size() >= 5:
+	if SettingsManager.max_players - all_players.size() >= 5:
 		return false
 	var time_since_died = OS.get_ticks_msec() / 1000.0 - dead_players[player_name] 
-	if time_since_died > CANT_REJOIN_FOR_TIME:
+	if time_since_died > SettingsManager.rejoin_timer:
 		return false
 	return true
 	
 func update_player_counter():
 	player_counter.text = "Player Count: " + str(all_players.size())
-	player_counter.text += "\nMax Players: " + str(MAX_PLAYERS)
+	player_counter.text += "\nMax Players: " + str(SettingsManager.max_players)
 	update_player_list()
 
 func update_player_list():
@@ -116,7 +140,12 @@ func update_player_list():
 		i += 1
 	$CanvasLayer/PlayerList.bbcode_text = s
 
-func add_winning_player(player_name: String):
-	players_who_won[player_name] = ""
+func add_winning_player(player_name: String, jump_count: int):
+	if not player_name in players_who_won or players_who_won[player_name] >= jump_count:
+		players_who_won[player_name] = jump_count
 	all_players[player_name].set_won()
 	update_player_list()
+	var s = "Winners[Move Count]\n"
+	for player_who_won in players_who_won:
+		s += "%s[%s]\n" % [player_who_won, str(players_who_won[player_who_won])]
+	$CanvasLayer/Scoreboard.text = s

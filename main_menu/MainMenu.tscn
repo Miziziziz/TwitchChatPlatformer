@@ -1,0 +1,203 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://main_menu/MainMenu.gd" type="Script" id=1]
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Main" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Main"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -72.0
+margin_top = -34.0
+margin_right = 72.0
+margin_bottom = 34.0
+
+[node name="PlayPremadeLevels" type="Button" parent="Main/VBoxContainer"]
+margin_right = 144.0
+margin_bottom = 20.0
+text = "Play Premade Levels"
+
+[node name="Settings" type="Button" parent="Main/VBoxContainer"]
+margin_top = 24.0
+margin_right = 144.0
+margin_bottom = 44.0
+text = "Settings"
+
+[node name="Exit" type="Button" parent="Main/VBoxContainer"]
+margin_top = 48.0
+margin_right = 144.0
+margin_bottom = 68.0
+text = "Exit"
+
+[node name="PremadeLevels" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="GridContainer" type="GridContainer" parent="PremadeLevels"]
+margin_left = -66.679
+margin_top = -82.7995
+margin_right = 102.321
+margin_bottom = 107.201
+columns = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="PremadeLevels"]
+margin_left = -59.7155
+margin_top = 114.517
+margin_right = -47.7155
+margin_bottom = 134.517
+text = "back"
+
+[node name="Settings" type="Control" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+
+[node name="AccountName" type="LineEdit" parent="Settings"]
+margin_left = -115.734
+margin_top = -81.9397
+margin_right = 106.266
+margin_bottom = -57.9397
+placeholder_text = "Enter Account Name..."
+
+[node name="Label" type="Label" parent="Settings/AccountName"]
+margin_left = -344.472
+margin_top = 5.1684
+margin_right = -8.47192
+margin_bottom = 19.1684
+text = "Account Name:"
+align = 2
+
+[node name="ChannelName" type="LineEdit" parent="Settings"]
+margin_left = -115.734
+margin_top = -52.3316
+margin_right = 106.266
+margin_bottom = -28.3316
+placeholder_text = "Enter Channel Name..."
+
+[node name="Label" type="Label" parent="Settings/ChannelName"]
+margin_left = -344.472
+margin_top = 5.1684
+margin_right = -8.47192
+margin_bottom = 19.1684
+text = "Channel Name:"
+align = 2
+
+[node name="OauthToken" type="LineEdit" parent="Settings"]
+margin_left = -115.734
+margin_top = -22.7234
+margin_right = 106.266
+margin_bottom = 1.27658
+secret = true
+placeholder_text = "Enter Oauth Token..."
+
+[node name="Label" type="Label" parent="Settings/OauthToken"]
+margin_left = -344.472
+margin_top = 5.1684
+margin_right = -8.47192
+margin_bottom = 19.1684
+text = "Oauth Token:"
+align = 2
+
+[node name="Button" type="Button" parent="Settings/OauthToken"]
+margin_left = 233.224
+margin_top = 2.35971
+margin_right = 345.224
+margin_bottom = 22.3597
+text = "get oauth token"
+
+[node name="MaxPlayers" type="LineEdit" parent="Settings"]
+margin_left = -115.734
+margin_top = 25.5425
+margin_right = 106.266
+margin_bottom = 49.5425
+text = "20"
+placeholder_text = "Enter Oauth Token..."
+
+[node name="Label" type="Label" parent="Settings/MaxPlayers"]
+margin_left = -344.472
+margin_top = 5.1684
+margin_right = -8.47192
+margin_bottom = 19.1684
+text = "Max Players:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RejoinTimer" type="LineEdit" parent="Settings"]
+margin_left = -115.734
+margin_top = 55.241
+margin_right = 106.266
+margin_bottom = 79.241
+text = "10"
+placeholder_text = "Enter Oauth Token..."
+
+[node name="Label" type="Label" parent="Settings/RejoinTimer"]
+margin_left = -344.472
+margin_top = 5.1684
+margin_right = -8.47192
+margin_bottom = 19.1684
+text = "Rejoin Timer:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Save" type="Button" parent="Settings"]
+margin_left = -61.735
+margin_top = 120.972
+margin_right = 34.265
+margin_bottom = 140.972
+text = "Save Settings"
+
+[node name="Misc" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Credits" type="Label" parent="Misc"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = -24.0
+margin_right = 132.0
+margin_bottom = -10.0
+text = "Created by miziziziz"
+[connection signal="button_up" from="Settings/OauthToken/Button" to="." method="load_oauth_token_page_in_browser"]

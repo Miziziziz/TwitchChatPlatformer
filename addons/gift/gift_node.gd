@@ -195,7 +195,10 @@ func handle_message(message : String, tags : Dictionary) -> void:
 		"PRIVMSG":
 			var sender_data : SenderData = SenderData.new(user_regex.search(msg[0]).get_string(), msg[2], tags)
 			handle_command(sender_data, msg)
-			emit_signal("chat_message", sender_data, msg[3].right(1))
+			var full_message = msg[3].right(1)
+			if msg.size() > 4:
+				full_message += " " + msg[4]
+			emit_signal("chat_message", sender_data, full_message)
 			if(get_images):
 				if(!image_cache.badge_map.has(tags["room-id"])):
 					image_cache.get_badge_mappings(tags["room-id"])
