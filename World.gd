@@ -4,11 +4,13 @@ onready var player_obj = preload("res://Player/Player.tscn")
 var all_players = {}
 var players_who_won = {}
 
+var enabled = true
+
 onready var player_counter = $CanvasLayer/PlayerCounter
 onready var player_died_display = $CanvasLayer/DeathDisplay
 func _ready() -> void:
 	connect("cmd_no_permission", self, "no_permission")
-	connect("chat_message", self, "parse_chat_input")
+	connect("chat_message", self, "parse_chat_data")
 	connect_to_twitch()
 	yield(self, "twitch_connected")
 	
@@ -29,22 +31,27 @@ func _ready() -> void:
 	for winzone in get_tree().get_nodes_in_group("winzone"):
 		winzone.connect("player_won", self, "add_winning_player")
 
-func parse_chat_input(sender_data: SenderData, message: String):
+func parse_chat_data(sender_data: SenderData, message: String, override=false):
+	parse_chat_input(sender_data.user, message, override)
+
+func parse_chat_input(player_name: String, message: String, override=false):
+	if !enabled and !override:
+		return
 	message = message.to_lower()
-	if message.begins_with("join") and !sender_data.user in all_players and (sender_data.user == SettingsManager.channel_name or\
-			 (all_players.size() < SettingsManager.max_players and !player_died_recently(sender_data.user))):
+	if message.begins_with("join") and !player_name in all_players and (player_name == SettingsManager.channel_name or\
+			 (all_players.size() < SettingsManager.max_players and !player_died_recently(player_name))):
 		var msg = message.split(" ")
 		var skin_index = -1
 		if msg.size() > 1 and msg[1].is_valid_integer():
 			skin_index = int(msg[1])
-		add_new_player(sender_data.user, skin_index)
+		add_new_player(player_name, skin_index)
 	elif message.begins_with("exit"):
-		remove_player(sender_data.user)
-	elif sender_data.user in all_players:
+		remove_player(player_name)
+	elif player_name in all_players:
 		if message.begins_with("reset"):
-			reset_player(sender_data.user)
+			reset_player(player_name)
 		else:
-			run_player_command(sender_data.user, message)
+			run_player_command(player_name, message)
 
 func _process(delta):
 	if Input.is_action_just_pressed("exit"):
@@ -140,12 +147,35 @@ func update_player_list():
 		i += 1
 	$CanvasLayer/PlayerList.bbcode_text = s
 
+func update_winning_players_display():
+	var s = "Winners[Move Count]\n"
+	if players_who_won.size() == 0:
+		s = ""
+	for player_who_won in players_who_won:
+		s += "%s[%s]\n" % [player_who_won, str(players_who_won[player_who_won])]
+	$CanvasLayer/Scoreboard.text = s
+
 func add_winning_player(player_name: String, jump_count: int):
 	if not player_name in players_who_won or players_who_won[player_name] >= jump_count:
 		players_who_won[player_name] = jump_count
 	all_players[player_name].set_won()
 	update_player_list()
-	var s = "Winners[Move Count]\n"
-	for player_who_won in players_who_won:
-		s += "%s[%s]\n" % [player_who_won, str(players_who_won[player_who_won])]
-	$CanvasLayer/Scoreboard.text = s
+	update_winning_players_display()
+
+func reset_game():
+	for player in all_players:
+		remove_player(player)
+		players_who_won = {}
+	update_player_counter()
+	update_winning_players_display()
+
+
+func disable():
+	enabled = false
+	for child in $CanvasLayer.get_children():
+		child.hide()
+
+func enable():
+	enabled = true
+	for child in $CanvasLayer.get_children():
+		child.show()
