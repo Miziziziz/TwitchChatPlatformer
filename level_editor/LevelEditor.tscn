@@ -390,9 +390,9 @@ margin_bottom = 22.0
 icon = ExtResource( 12 )
 
 [node name="CommandInput" type="LineEdit" parent="EditorUI"]
-margin_left = 701.0
+margin_left = 740.2
 margin_top = 566.0
-margin_right = 853.0
+margin_right = 892.2
 margin_bottom = 590.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -421,23 +421,26 @@ margin_bottom = 40.0
 
 [node name="Label" type="Label" parent="EditorUI/ClearButton/ConfirmDialog"]
 margin_left = 80.0
+margin_top = -9.5459
 margin_right = 165.0
-margin_bottom = 14.0
+margin_bottom = 4.4541
 text = "are you sure?"
 
 [node name="ConfirmClearButton" type="Button" parent="EditorUI/ClearButton/ConfirmDialog"]
-margin_left = 176.0
-margin_right = 210.0
-margin_bottom = 20.0
+margin_left = 81.6012
+margin_top = 3.8891
+margin_right = 115.601
+margin_bottom = 23.8891
 text = "yes"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DontClear" type="Button" parent="EditorUI/ClearButton/ConfirmDialog"]
-margin_left = 216.449
-margin_right = 244.449
-margin_bottom = 20.0
+margin_left = 122.05
+margin_top = 3.8891
+margin_right = 150.05
+margin_bottom = 23.8891
 text = "no"
 
 [node name="LoadLevels" type="Control" parent="EditorUI"]
@@ -483,16 +486,16 @@ margin_bottom = 20.0
 text = "hide saved levels"
 
 [node name="ShowButton" type="Button" parent="EditorUI/LoadLevels"]
-margin_right = 45.0
+margin_right = 128.0
 margin_bottom = 20.0
 text = "show saved levels"
 
 [node name="SaveButton" type="Button" parent="EditorUI"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 248.0
+margin_left = 164.845
 margin_top = -64.0
-margin_right = 332.0
+margin_right = 248.845
 margin_bottom = -44.0
 text = "Save Level"
 __meta__ = {
@@ -544,6 +547,55 @@ margin_right = 268.0
 margin_bottom = 24.0
 placeholder_text = "Enter level name..."
 
+[node name="PlayButton" type="Button" parent="EditorUI"]
+margin_left = 619.384
+margin_top = 568.0
+margin_right = 734.384
+margin_bottom = 588.0
+text = "Enter Play Mode"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StopPlayButton" type="Button" parent="EditorUI"]
+visible = false
+margin_left = 536.0
+margin_top = 568.0
+margin_right = 649.0
+margin_bottom = 588.0
+text = "Exit Play Mode"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoadFromClipBoardButton" type="Button" parent="EditorUI"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -70.8598
+margin_top = -32.2704
+margin_right = 100.14
+margin_bottom = -12.2704
+text = "load level from clipboard"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CopyToClipBoardButton2" type="Button" parent="EditorUI"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -63.8598
+margin_top = -59.1708
+margin_right = 93.1402
+margin_bottom = -39.1708
+text = "copy level to clipboard"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="SelectedSpriteDisplay" type="Sprite" parent="."]
 
 [node name="Debug" type="Sprite" parent="."]
@@ -562,18 +614,22 @@ texture = ExtResource( 14 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 14 )
 [connection signal="button_up" from="EditorUI/ClearButton" to="EditorUI/ClearButton/ConfirmDialog" method="show"]
-[connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/ConfirmClearButton" to="." method="clear_map"]
 [connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/ConfirmClearButton" to="EditorUI/ClearButton/ConfirmDialog" method="hide"]
+[connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/ConfirmClearButton" to="." method="clear_map"]
 [connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/DontClear" to="EditorUI/ClearButton/ConfirmDialog" method="hide"]
-[connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/ShowButton" method="show"]
 [connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/Panel" method="hide"]
 [connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/HideButton" method="hide"]
-[connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/ShowButton" method="hide"]
+[connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/ShowButton" method="show"]
 [connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/Panel" method="show"]
 [connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/HideButton" method="show"]
+[connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/ShowButton" method="hide"]
 [connection signal="button_up" from="EditorUI/SaveButton" to="." method="attempt_save"]
-[connection signal="button_up" from="EditorUI/SaveButton/ConfirmOverwrite/Overwrite" to="." method="force_save"]
 [connection signal="button_up" from="EditorUI/SaveButton/ConfirmOverwrite/Overwrite" to="EditorUI/SaveButton/ConfirmOverwrite" method="hide"]
+[connection signal="button_up" from="EditorUI/SaveButton/ConfirmOverwrite/Overwrite" to="." method="force_save"]
 [connection signal="button_up" from="EditorUI/SaveButton/ConfirmOverwrite/DontOverwrite" to="EditorUI/SaveButton/ConfirmOverwrite" method="hide"]
+[connection signal="button_up" from="EditorUI/PlayButton" to="." method="set_play_mode"]
+[connection signal="button_up" from="EditorUI/StopPlayButton" to="." method="set_edit_mode"]
+[connection signal="button_up" from="EditorUI/LoadFromClipBoardButton" to="." method="load_level_from_clipboard"]
+[connection signal="button_up" from="EditorUI/CopyToClipBoardButton2" to="." method="copy_level_data_to_clipboard"]
 
 [editable path="World/CanvasLayer"]

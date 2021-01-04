@@ -14,7 +14,8 @@ onready var save_level_button = $EditorUI/SaveButton
 onready var save_level_name_input = $EditorUI/SaveButton/SaveFileInput
 onready var confirm_save_level_dialog = $EditorUI/SaveButton/ConfirmOverwrite
 onready var save_anim_player = $EditorUI/SaveButton/SaveSuccessfuly/AnimationPlayer
-
+onready var enter_play_mode_button = $EditorUI/PlayButton
+onready var exit_play_mode_button = $EditorUI/StopPlayButton
 var in_edit_mode = true
 
 var top_left_pos = Vector2()
@@ -41,6 +42,8 @@ func set_play_mode():
 	in_edit_mode = false
 	cur_tile = TILES.NONE
 	selected_sprite_display.hide()
+	enter_play_mode_button.hide()
+	exit_play_mode_button.show()
 
 func set_edit_mode():
 	for child in editor_ui.get_children():
@@ -49,6 +52,8 @@ func set_edit_mode():
 	in_edit_mode = true
 	selected_sprite_display.show()
 	selected_sprite_display.texture = null
+	enter_play_mode_button.show()
+	exit_play_mode_button.hide()
 
 func enter_input_command(command_text: String):
 	game_manager.parse_chat_input(SettingsManager.channel_name, command_text, true)
@@ -163,7 +168,24 @@ func attempt_save():
 	else:
 		save_level(save_file_name)
 
+func copy_level_data_to_clipboard():
+	OS.set_clipboard(to_json(get_level_data()))
+
+func load_level_from_clipboard():
+	var clipboard = OS.get_clipboard()
+	if not validate_json(clipboard):
+		set_level_data(parse_json(clipboard))
+
 func save_level(save_file_name: String):
+	var save_file_path = save_file_name_to_path(save_file_name)
+	var save_game = File.new()
+	save_game.open(save_file_path, File.WRITE)
+	save_game.store_line(to_json(get_level_data()))
+	save_game.close()
+	save_anim_player.play("fade_out")
+	update_saved_levels_list()
+
+func get_level_data():
 	var ground_tiles_data = []
 	var start_x = int(round(top_left_pos.x))
 	var end_x = int(round(bot_right_pos.x))
@@ -182,21 +204,13 @@ func save_level(save_file_name: String):
 		data.y = to_int(spike_obj.global_position.y)
 		spikes_data.append(data)
 	
-	var save_data = {
+	var level_data = {
 		"ground_tiles_data" : ground_tiles_data,
 		"spikes_data" : spikes_data,
 	}
-	
-	var save_file_path = save_file_name_to_path(save_file_name)
-	var save_game = File.new()
-	save_game.open(save_file_path, File.WRITE)
-	save_game.store_line(to_json(save_data))
-	save_game.close()
-	save_anim_player.play("fade_out")
-	update_saved_levels_list()
+	return level_data
 
 func load_level(save_file_name: String):
-	clear_map()
 	var save_file_path = save_file_name_to_path(save_file_name)
 	var saved_level = File.new()
 	var loaded_data = {}
@@ -208,13 +222,19 @@ func load_level(save_file_name: String):
 		return
 	saved_level.close()
 	
-	clear_map()
-	for ground_tile_data in loaded_data.ground_tiles_data:
-		place_ground_tile(ground_tile_data.x, ground_tile_data.y)
-	for spike_data in loaded_data.spikes_data:
-		place_spike(spike_data.x, spike_data.y)
-	
+	set_level_data(loaded_data)
 	save_level_name_input.text = save_file_name
+
+func set_level_data(level_data):
+	if level_data == null:
+		return
+	clear_map()
+	if "ground_tiles_data" in level_data:
+		for ground_tile_data in level_data.ground_tiles_data:
+			place_ground_tile(ground_tile_data.x, ground_tile_data.y)
+	if "spikes_data" in level_data:
+		for spike_data in level_data.spikes_data:
+			place_spike(spike_data.x, spike_data.y)
 
 func save_file_name_to_path(save_file_name: String):
 	return SAVE_FILES_DIRECTORY + save_file_name + ".level"

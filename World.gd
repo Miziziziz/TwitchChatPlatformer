@@ -37,6 +37,7 @@ func parse_chat_data(sender_data: SenderData, message: String, override=false):
 func parse_chat_input(player_name: String, message: String, override=false):
 	if !enabled and !override:
 		return
+	
 	message = message.to_lower()
 	if message.begins_with("join") and !player_name in all_players and (player_name == SettingsManager.channel_name or\
 			 (all_players.size() < SettingsManager.max_players and !player_died_recently(player_name))):
@@ -151,9 +152,15 @@ func update_winning_players_display():
 	var s = "Winners[Move Count]\n"
 	if players_who_won.size() == 0:
 		s = ""
-	for player_who_won in players_who_won:
+	var sorted_players_who_won = players_who_won.keys()
+	sorted_players_who_won.sort_custom(self, "compare_winning_players")
+	
+	for player_who_won in sorted_players_who_won:
 		s += "%s[%s]\n" % [player_who_won, str(players_who_won[player_who_won])]
 	$CanvasLayer/Scoreboard.text = s
+
+func compare_winning_players(player_name_a: String, player_name_b: String):
+	   return players_who_won[player_name_a] < players_who_won[player_name_b]
 
 func add_winning_player(player_name: String, jump_count: int):
 	if not player_name in players_who_won or players_who_won[player_name] >= jump_count:
