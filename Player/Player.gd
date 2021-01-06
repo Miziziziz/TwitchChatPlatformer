@@ -37,9 +37,8 @@ func _physics_process(delta):
 		velocity.x -= sign(velocity.x) * SLOW_DOWN_ON_WALL * delta
 
 	if is_on_floor():
-		if command_queue.size() > 0:
-			var command = command_queue.pop_back()
-			jump(command.jump_right, command.power)
+		if command_queue.size() > 0 and command_queue.back().time < 0:
+			run_next_command()
 		else:
 			velocity = Vector2(0.0, 1.0)
 		anim_player.play("idle")
@@ -61,10 +60,11 @@ func jump(jump_right: bool, power: int):
 	$AfkTimer.start()
 	jump_count += 1
 
-func add_to_jump_queue(jump_right: bool, power: int):
+func add_to_jump_queue(jump_right: bool, power: int, time=-1):
 	command_queue.push_front({
 		"jump_right": jump_right,
 		"power": power,
+		"time": time,
 		})
 
 func flip():
@@ -124,3 +124,11 @@ func reset():
 	jump_count = 0
 	command_queue = []
 	velocity = Vector2.ZERO
+
+func update_time(cur_time):
+	if command_queue.size() > 0 and command_queue.back().time == ClockManager.cur_time:
+		run_next_command()
+
+func run_next_command():
+	var command = command_queue.pop_back()
+	jump(command.jump_right, command.power)

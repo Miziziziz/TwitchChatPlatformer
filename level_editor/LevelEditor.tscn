@@ -307,7 +307,7 @@ position = Vector2( 24, 8 )
 position = Vector2( 1000, 520 )
 
 [node name="StartPoint" type="Node2D" parent="."]
-position = Vector2( 48, 512 )
+position = Vector2( 64, 492 )
 
 [node name="Label" type="Label" parent="StartPoint"]
 self_modulate = Color( 0, 1, 0.952941, 1 )
@@ -322,7 +322,7 @@ __meta__ = {
 }
 
 [node name="EndPoint" type="Node2D" parent="."]
-position = Vector2( 624, 528 )
+position = Vector2( 984, 104 )
 
 [node name="Label" type="Label" parent="EndPoint"]
 self_modulate = Color( 0.901961, 0.92549, 0.129412, 1 )

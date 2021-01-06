@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ui/HanaleiFill-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Environment/Controls.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Environment/Scoreboard.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/UIFont.tres" type="DynamicFont" id=4]
 [ext_resource path="res://ui/DeathDisplay.gd" type="Script" id=5]
+[ext_resource path="res://ui/ClockDisplay.gd" type="Script" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 11
@@ -26,6 +27,12 @@ font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 12
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 32
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
@@ -80,27 +87,30 @@ wait_time = 2.0
 one_shot = true
 autostart = true
 
-[node name="Controls" type="Label" parent="." instance=ExtResource( 2 )]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 8.0
+[node name="Controls" parent="." instance=ExtResource( 2 )]
 margin_top = -48.0
-margin_right = 397.0
 margin_bottom = 81.0
 custom_fonts/font = SubResource( 3 )
 text = "commands: 'join' or join '[skin_index]', 'reset', 'exit'
-[r/l] [1-10] to jump right/left with power 1 to 10, examples: 'r 5', 'l 3'"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[r/l] [1-10] [0-5](optional) to jump right/left with power 1 to 10 at time 0-5, examples: 'r 5', 'l 3', 'r 8 2'"
 
-[node name="Scoreboard" type="Label" parent="." instance=ExtResource( 3 )]
-self_modulate = Color( 1, 0.941176, 0, 1 )
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 48.0
-margin_bottom = 25.0
+[node name="Scoreboard" parent="." instance=ExtResource( 3 )]
+margin_left = 16.0
+margin_top = 48.0
+margin_right = 56.0
+margin_bottom = 65.0
 custom_fonts/font = SubResource( 4 )
+
+[node name="ClockDisplay" type="Label" parent="." groups=[
+"timed",
+]]
+margin_left = 16.0
+margin_top = 8.0
+margin_right = 56.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 5 )
+text = "Time: 0"
+script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

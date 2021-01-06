@@ -57,6 +57,7 @@ config/icon="res://icon.png"
 [autoload]
 
 SettingsManager="*res://singleton/SettingsManager.gd"
+ClockManager="*res://singleton/ClockManager.tscn"
 
 [debug]
 

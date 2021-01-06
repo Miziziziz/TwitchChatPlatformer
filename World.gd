@@ -9,6 +9,7 @@ var enabled = true
 onready var player_counter = $CanvasLayer/PlayerCounter
 onready var player_died_display = $CanvasLayer/DeathDisplay
 func _ready() -> void:
+	ClockManager.reset()
 	connect("cmd_no_permission", self, "no_permission")
 	connect("chat_message", self, "parse_chat_data")
 	connect_to_twitch()
@@ -78,8 +79,10 @@ func run_player_command(player_name: String, player_command: String):
 	var player_ref : Player = all_players[player_name]
 	var jump_right = false
 	var jump_power = 1
-	
+	var jump_time = -1
 	var p_c = player_command.split(" ")
+	
+	var has_time_command = false
 	
 	if p_c.size() >= 2:
 		var first_char : String = p_c[0]
@@ -94,10 +97,16 @@ func run_player_command(player_name: String, player_command: String):
 			jump_power = int(p_c[1])
 		else:
 			return
-		player_ref.add_to_jump_queue(jump_right, jump_power)
+		if p_c.size() >= 3:
+			if p_c[2].is_valid_integer():
+				jump_time = int(p_c[2])
+				has_time_command = true
+		player_ref.add_to_jump_queue(jump_right, jump_power, jump_time)
 	if p_c.size() > 2:
 		p_c.remove(0)
 		p_c.remove(0)
+		if has_time_command:
+			p_c.remove(0)
 		var new_cmd = ""
 		for s in p_c:
 			new_cmd += s + " "
@@ -155,8 +164,12 @@ func update_winning_players_display():
 	var sorted_players_who_won = players_who_won.keys()
 	sorted_players_who_won.sort_custom(self, "compare_winning_players")
 	
+	var i = 0
 	for player_who_won in sorted_players_who_won:
 		s += "%s[%s]\n" % [player_who_won, str(players_who_won[player_who_won])]
+		i += 1
+		if i > 20:
+			break
 	$CanvasLayer/Scoreboard.text = s
 
 func compare_winning_players(player_name_a: String, player_name_b: String):
