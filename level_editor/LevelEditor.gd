@@ -56,6 +56,7 @@ func set_play_mode():
 	widget_drawer.hide_widgets()
 	ClockManager.reset()
 	get_tree().call_group("moving_platforms", "play")
+	$World/CanvasLayer/DeathDisplay.hide()
 
 func set_edit_mode():
 	for child in editor_ui.get_children():

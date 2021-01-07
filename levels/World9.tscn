@@ -540,47 +540,38 @@ position = Vector2( 240, 480 )
 [node name="MovingPlatform" parent="MovingPlatforms" instance=ExtResource( 12 )]
 position = Vector2( -56, 0 )
 
-[node name="StartPos" parent="MovingPlatforms/MovingPlatform" index="1"]
-position = Vector2( 2, 0 )
-
-[node name="EndPos" parent="MovingPlatforms/MovingPlatform" index="2"]
-position = Vector2( 2, -208 )
+[node name="EndPos" parent="MovingPlatforms/MovingPlatform" index="0"]
+position = Vector2( 0, -208 )
 
 [node name="MovingPlatform4" parent="MovingPlatforms" instance=ExtResource( 12 )]
 position = Vector2( 696, 40 )
 
-[node name="StartPos" parent="MovingPlatforms/MovingPlatform4" index="1"]
-position = Vector2( 2, 0 )
-
-[node name="EndPos" parent="MovingPlatforms/MovingPlatform4" index="2"]
+[node name="EndPos" parent="MovingPlatforms/MovingPlatform4" index="0"]
 position = Vector2( -352, -88 )
 
 [node name="MovingPlatform5" parent="MovingPlatforms" instance=ExtResource( 12 )]
 position = Vector2( 648, 40 )
 
-[node name="StartPos" parent="MovingPlatforms/MovingPlatform5" index="1"]
-position = Vector2( 2, 0 )
-
-[node name="EndPos" parent="MovingPlatforms/MovingPlatform5" index="2"]
+[node name="EndPos" parent="MovingPlatforms/MovingPlatform5" index="0"]
 position = Vector2( -352, -88 )
 
 [node name="MovingPlatform2" parent="MovingPlatforms" instance=ExtResource( 12 )]
 position = Vector2( -8, -208 )
 
-[node name="StartPos" parent="MovingPlatforms/MovingPlatform2" index="1"]
-position = Vector2( 2, -200 )
+[node name="EndPos" parent="MovingPlatforms/MovingPlatform2" index="0"]
+position = Vector2( 0, 0 )
 
-[node name="EndPos" parent="MovingPlatforms/MovingPlatform2" index="2"]
-position = Vector2( 2, 0 )
+[node name="Platform" parent="MovingPlatforms/MovingPlatform2" index="1"]
+position = Vector2( 0, -192 )
 
 [node name="MovingPlatform3" parent="MovingPlatforms" instance=ExtResource( 12 )]
 position = Vector2( 272, -336 )
 
-[node name="StartPos" parent="MovingPlatforms/MovingPlatform3" index="1"]
-position = Vector2( -8, 0 )
+[node name="EndPos" parent="MovingPlatforms/MovingPlatform3" index="0"]
+position = Vector2( 240, 0 )
 
-[node name="EndPos" parent="MovingPlatforms/MovingPlatform3" index="2"]
-position = Vector2( 304, 0 )
+[node name="Platform" parent="MovingPlatforms/MovingPlatform3" index="1"]
+position = Vector2( -8, 0 )
 
 [editable path="MovingPlatforms/MovingPlatform"]
 

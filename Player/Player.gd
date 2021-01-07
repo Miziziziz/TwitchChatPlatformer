@@ -106,29 +106,40 @@ func set_won():
 #	"skeleton.png": Vector2(0.0, 10.0),
 #	"Miz_Goku.png": Vector2(0.0, 12.0),
 #}
-
+var skins = [
+	"res://Player/skins/boxes.png",
+	"res://Player/skins/cat-sprite.png",
+	"res://Player/skins/goblin.png",
+	"res://Player/skins/large_candleguy.png",
+	"res://Player/skins/large_gal.png",
+	"res://Player/skins/Miz_Goku.png",
+	"res://Player/skins/mushroom.png",
+	"res://Player/skins/ring_character.png",
+	"res://Player/skins/skeleton.png"
+]
 func set_skin(skin_index: int):
-	var files = []
-	var dir = Directory.new()
-	dir.open(SKINS_FOLDER_PATH)
-	dir.list_dir_begin()
-
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif file.ends_with(".png"):
-			files.append(file)
-
-	dir.list_dir_end()
+#	var files = []
+#	var dir = Directory.new()
+#	dir.open(SKINS_FOLDER_PATH)
+#	dir.list_dir_begin()
+#
+#	while true:
+#		var file = dir.get_next()
+#		if file == "":
+#			break
+#		elif file.ends_with(".png"):
+#			files.append(file)
+#
+#	dir.list_dir_end()
 	
 	if skin_index < 0:
 		skin_index = randi()
-	skin_index = posmod(skin_index, files.size())
-	var file_name = files[skin_index]
+	skin_index = posmod(skin_index, skins.size())
+	#var file_name = files[skin_index]
 	var sprite : Sprite = $Graphics/Sprite
-	sprite.texture = load(SKINS_FOLDER_PATH + file_name)
-	if file_name.begins_with("large"):
+	#sprite.texture = load(SKINS_FOLDER_PATH + file_name)
+	sprite.texture = load(skins[skin_index])
+	if skins[skin_index].begins_with("large"):
 		sprite.scale = Vector2.ONE * 0.75
 	sprite.offset.y = -sprite.texture.get_size().y / 2.0
 #	if file_name in custom_offsets:

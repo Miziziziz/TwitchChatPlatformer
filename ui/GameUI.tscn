@@ -94,6 +94,18 @@ custom_fonts/font = SubResource( 3 )
 text = "commands: 'join' or join '[skin_index]', 'reset', 'exit'
 [r/l] [1-10] [0-5](optional) to jump right/left with power 1 to 10 at time 0-5, examples: 'r 5', 'l 3', 'r 8 2'"
 
+[node name="Credits" parent="." instance=ExtResource( 2 )]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -168.0
+margin_top = -64.0
+margin_right = -8.0
+margin_bottom = -7.0
+custom_fonts/font = SubResource( 3 )
+text = "created by twitch.tv/miziziziz
+youtube.com/user/miziziziz 
+(four iz's)  BUY MY GAMES PLEASE"
+
 [node name="Scoreboard" parent="." instance=ExtResource( 3 )]
 margin_left = 16.0
 margin_top = 48.0

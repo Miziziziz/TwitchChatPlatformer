@@ -10,6 +10,249 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Misc" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Credits" type="Label" parent="Misc"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = -24.0
+margin_right = 132.0
+margin_bottom = -10.0
+text = "Created by miziziziz"
+
+[node name="Signature" type="Control" parent="Misc"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Note" type="Label" parent="Misc/Signature"]
+margin_left = 10.4882
+margin_top = 11.9865
+margin_right = 139.488
+margin_bottom = 25.9865
+text = "Created by miziziziz"
+
+[node name="Note2" type="Label" parent="Misc/Signature"]
+margin_left = 85.4082
+margin_top = 563.778
+margin_right = 214.408
+margin_bottom = 577.778
+text = "Created by miziziziz"
+
+[node name="Note3" type="Label" parent="Misc/Signature"]
+margin_left = 142.49
+margin_top = 430.587
+margin_right = 271.49
+margin_bottom = 444.587
+text = "Created by miziziziz"
+
+[node name="Note4" type="Label" parent="Misc/Signature"]
+margin_left = 79.4621
+margin_top = 334.261
+margin_right = 208.462
+margin_bottom = 348.261
+text = "Created by miziziziz"
+
+[node name="Note5" type="Label" parent="Misc/Signature"]
+margin_left = 731.147
+margin_top = 82.1496
+margin_right = 860.147
+margin_bottom = 96.1496
+text = "Created by miziziziz"
+
+[node name="Note6" type="Label" parent="Misc/Signature"]
+margin_left = 823.906
+margin_top = 265.288
+margin_right = 952.906
+margin_bottom = 279.288
+text = "Created by miziziziz"
+
+[node name="Note7" type="Label" parent="Misc/Signature"]
+margin_left = 678.822
+margin_top = 436.533
+margin_right = 807.822
+margin_bottom = 450.533
+text = "Created by miziziziz"
+
+[node name="Note8" type="Label" parent="Misc/Signature"]
+margin_left = 505.198
+margin_top = 88.0956
+margin_right = 634.198
+margin_bottom = 102.096
+text = "Created by miziziziz"
+
+[node name="Note9" type="Label" parent="Misc/Signature"]
+margin_left = 172.22
+margin_top = 141.61
+margin_right = 301.22
+margin_bottom = 155.61
+text = "Created by miziziziz"
+
+[node name="Note10" type="Label" parent="Misc/Signature"]
+margin_left = 727.58
+margin_top = 312.856
+margin_right = 856.58
+margin_bottom = 326.856
+text = "Created by miziziziz"
+
+[node name="Note11" type="Label" parent="Misc/Signature"]
+margin_left = 859.582
+margin_top = 551.886
+margin_right = 988.582
+margin_bottom = 565.886
+text = "Created by miziziziz"
+
+[node name="Note12" type="Label" parent="Misc/Signature"]
+margin_left = 563.469
+margin_top = 580.427
+margin_right = 692.469
+margin_bottom = 594.427
+text = "Created by miziziziz"
+
+[node name="Note13" type="Label" parent="Misc/Signature"]
+margin_left = 417.197
+margin_top = 413.938
+margin_right = 546.197
+margin_bottom = 427.938
+text = "Created by miziziziz"
+
+[node name="Note14" type="Label" parent="Misc/Signature"]
+margin_left = 427.899
+margin_top = 151.124
+margin_right = 556.899
+margin_bottom = 165.124
+text = "Created by miziziziz"
+
+[node name="Note15" type="Label" parent="Misc/Signature"]
+margin_left = 734.715
+margin_top = 252.206
+margin_right = 863.715
+margin_bottom = 266.206
+text = "Created by miziziziz"
+
+[node name="Note16" type="Label" parent="Misc/Signature"]
+margin_left = 836.987
+margin_top = 120.204
+margin_right = 965.987
+margin_bottom = 134.204
+text = "Created by miziziziz"
+
+[node name="Note17" type="Label" parent="Misc/Signature"]
+margin_left = 782.283
+margin_top = 129.718
+margin_right = 911.283
+margin_bottom = 143.718
+text = "Created by miziziziz"
+
+[node name="Note18" type="Label" parent="Misc/Signature"]
+margin_left = 752.553
+margin_top = 84.5281
+margin_right = 881.553
+margin_bottom = 98.5281
+text = "Created by miziziziz"
+
+[node name="Note19" type="Label" parent="Misc/Signature"]
+margin_left = 740.661
+margin_top = 48.8519
+margin_right = 869.661
+margin_bottom = 62.8519
+text = "Created by miziziziz"
+
+[node name="Note20" type="Label" parent="Misc/Signature"]
+margin_left = 492.117
+margin_top = 79.7713
+margin_right = 621.117
+margin_bottom = 93.7713
+text = "Created by miziziziz"
+
+[node name="Note21" type="Label" parent="Misc/Signature"]
+margin_left = 436.224
+margin_top = 141.61
+margin_right = 565.224
+margin_bottom = 155.61
+text = "Created by miziziziz"
+
+[node name="Note22" type="Label" parent="Misc/Signature"]
+margin_left = 276.87
+margin_top = 79.7713
+margin_right = 405.87
+margin_bottom = 93.7713
+text = "Created by miziziziz"
+
+[node name="Note23" type="Label" parent="Misc/Signature"]
+margin_left = 262.6
+margin_top = 39.3383
+margin_right = 391.6
+margin_bottom = 53.3383
+text = "Created by miziziziz"
+
+[node name="Note24" type="Label" parent="Misc/Signature"]
+margin_left = 12.8662
+margin_top = 104.745
+margin_right = 141.866
+margin_bottom = 118.745
+text = "Created by miziziziz"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Misc"]
+margin_left = 31.5346
+margin_top = 29.1478
+margin_right = 95.5346
+margin_bottom = 97.1478
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="YoutubeButton" type="Button" parent="Misc/VBoxContainer"]
+margin_right = 87.0
+margin_bottom = 20.0
+text = "My Youtube"
+
+[node name="TwitterButton" type="Button" parent="Misc/VBoxContainer"]
+margin_top = 24.0
+margin_right = 87.0
+margin_bottom = 44.0
+text = "My Twitter"
+
+[node name="TwitchButton" type="Button" parent="Misc/VBoxContainer"]
+margin_top = 48.0
+margin_right = 87.0
+margin_bottom = 68.0
+text = "My Twitch"
+
+[node name="Title" type="Label" parent="Misc"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -240.644
+margin_top = -138.373
+margin_right = -138.644
+margin_bottom = -124.373
+rect_scale = Vector2( 5, 5 )
+text = "PLATSWARMERS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Misc"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -40.1189
+margin_top = -69.5083
+margin_right = 35.8811
+margin_bottom = -55.5083
+text = "by miziziziz"
+
 [node name="Main" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -38,16 +281,28 @@ margin_right = 144.0
 margin_bottom = 20.0
 text = "Play Premade Levels"
 
-[node name="Settings" type="Button" parent="Main/VBoxContainer"]
+[node name="LevelEditor" type="Button" parent="Main/VBoxContainer"]
 margin_top = 24.0
 margin_right = 144.0
 margin_bottom = 44.0
-text = "Settings"
+text = "Level Editor"
 
-[node name="Exit" type="Button" parent="Main/VBoxContainer"]
+[node name="Settings" type="Button" parent="Main/VBoxContainer"]
 margin_top = 48.0
 margin_right = 144.0
 margin_bottom = 68.0
+text = "Settings"
+
+[node name="Credits" type="Button" parent="Main/VBoxContainer"]
+margin_top = 72.0
+margin_right = 144.0
+margin_bottom = 92.0
+text = "Credits"
+
+[node name="Exit" type="Button" parent="Main/VBoxContainer"]
+margin_top = 96.0
+margin_right = 144.0
+margin_bottom = 116.0
 text = "Exit"
 
 [node name="PremadeLevels" type="Control" parent="."]
@@ -187,17 +442,41 @@ margin_right = 34.265
 margin_bottom = 140.972
 text = "Save Settings"
 
-[node name="Misc" type="Control" parent="."]
+[node name="Credits" type="Control" parent="."]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 40.0
+margin_bottom = 40.0
 
-[node name="Credits" type="Label" parent="Misc"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = -24.0
-margin_right = 132.0
-margin_bottom = -10.0
-text = "Created by miziziziz"
+[node name="Back" type="Button" parent="Credits"]
+margin_left = 432.284
+margin_top = 394.517
+margin_right = 473.284
+margin_bottom = 414.517
+text = "back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Credits"]
+margin_left = 349.053
+margin_top = 217.981
+margin_right = 608.053
+margin_bottom = 384.981
+text = "Created by miziziziz
+
+with art by Vicente Nitti (@vnitti) CC BY 4.0
+
+and skins by 
+luizmelo
+Myrozyn
+sco_otr
+GoldenEvolution
+Cat in a box
+Hairic"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="button_up" from="Misc/VBoxContainer/YoutubeButton" to="." method="open_youtube"]
+[connection signal="button_up" from="Misc/VBoxContainer/TwitterButton" to="." method="open_twitter"]
+[connection signal="button_up" from="Misc/VBoxContainer/TwitchButton" to="." method="open_twitch"]
 [connection signal="button_up" from="Settings/OauthToken/Button" to="." method="load_oauth_token_page_in_browser"]

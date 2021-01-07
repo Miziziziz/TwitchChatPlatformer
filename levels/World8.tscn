@@ -396,15 +396,10 @@ position = Vector2( 168, 72 )
 position = Vector2( 513.299, 299.806 )
 current = true
 
-[node name="MovingPlatforms" type="Node2D" parent="."]
+[node name="MovingPlatform" parent="." instance=ExtResource( 12 )]
+position = Vector2( 312, 432 )
 
-[node name="MovingPlatform" parent="MovingPlatforms" instance=ExtResource( 12 )]
-position = Vector2( 368, 440 )
+[node name="EndPos" parent="MovingPlatform" index="0"]
+position = Vector2( 384, 0 )
 
-[node name="StartPos" parent="MovingPlatforms/MovingPlatform" index="1"]
-position = Vector2( -56, 0 )
-
-[node name="EndPos" parent="MovingPlatforms/MovingPlatform" index="2"]
-position = Vector2( 320, 0 )
-
-[editable path="MovingPlatforms/MovingPlatform"]
+[editable path="MovingPlatform"]

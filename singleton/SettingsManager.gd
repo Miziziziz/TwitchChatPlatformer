@@ -20,6 +20,13 @@ var serializable_fields = [
 var premade_levels = [
 	"res://levels/World.tscn",
 	"res://levels/World2.tscn",
+	"res://levels/World3.tscn",
+	"res://levels/World4.tscn",
+	"res://levels/World5.tscn",
+	"res://levels/World6.tscn",
+	"res://levels/World7.tscn",
+	"res://levels/World8.tscn",
+	"res://levels/World9.tscn",
 ]
 
 func _ready():
