@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Player/skins/skeleton.png" type="Texture" id=2]
+[ext_resource path="res://Player/skins/cat-sprite.png" type="Texture" id=2]
 [ext_resource path="res://ui/UIFont.tres" type="DynamicFont" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 15 )
+extents = Vector2( 7, 15 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "idle"
@@ -75,7 +75,9 @@ anims/idle = SubResource( 2 )
 anims/jump = SubResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="Graphics"]
+position = Vector2( 0, 26.1629 )
 texture = ExtResource( 2 )
+offset = Vector2( 0, -16 )
 hframes = 5
 
 [node name="AfkTimer" type="Timer" parent="."]

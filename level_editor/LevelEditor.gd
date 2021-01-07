@@ -8,6 +8,8 @@ onready var game_manager = $World
 onready var command_input = $EditorUI/CommandInput
 onready var ground_tile_button = $EditorUI/TilePalette/GridContainer/GroundTile
 onready var spikes_tile_button = $EditorUI/TilePalette/GridContainer/SpikesTile
+onready var moving_platform_tile_button = $EditorUI/TilePalette/GridContainer/MovingPlatformTile
+
 onready var tilemap = $TileMap
 onready var saved_levels_container = $EditorUI/LoadLevels/Panel/ScrollContainer/VBoxContainer
 onready var save_level_button = $EditorUI/SaveButton
@@ -16,6 +18,11 @@ onready var confirm_save_level_dialog = $EditorUI/SaveButton/ConfirmOverwrite
 onready var save_anim_player = $EditorUI/SaveButton/SaveSuccessfuly/AnimationPlayer
 onready var enter_play_mode_button = $EditorUI/PlayButton
 onready var exit_play_mode_button = $EditorUI/StopPlayButton
+onready var widget_drawer = $WidgetDrawer
+
+onready var start_point = $StartPoint
+onready var end_point = $EndPoint
+
 var in_edit_mode = true
 
 var top_left_pos = Vector2()
@@ -26,6 +33,7 @@ func _ready():
 	command_input.connect("text_entered", self, "enter_input_command")
 	ground_tile_button.connect("button_up", self, "select_ground_tile")
 	spikes_tile_button.connect("button_up", self, "select_spikes_tile")
+	moving_platform_tile_button.connect("button_up", self, "select_moving_platform_tile")
 	
 	top_left_pos = tilemap.world_to_map($TileMap/TopLeft.global_position)
 	bot_right_pos = tilemap.world_to_map($TileMap/BotRight.global_position)
@@ -44,6 +52,10 @@ func set_play_mode():
 	selected_sprite_display.hide()
 	enter_play_mode_button.hide()
 	exit_play_mode_button.show()
+	command_input.show()
+	widget_drawer.hide_widgets()
+	ClockManager.reset()
+	get_tree().call_group("moving_platforms", "play")
 
 func set_edit_mode():
 	for child in editor_ui.get_children():
@@ -54,32 +66,84 @@ func set_edit_mode():
 	selected_sprite_display.texture = null
 	enter_play_mode_button.show()
 	exit_play_mode_button.hide()
+	widget_drawer.draw_widgets()
+	get_tree().call_group("instanced", "queue_free")
+	get_tree().call_group("moving_platforms", "pause")
 
 func enter_input_command(command_text: String):
 	game_manager.parse_chat_input(SettingsManager.channel_name, command_text, true)
 	command_input.text = ""
 
-enum TILES {NONE, GROUND, SPIKES}
+enum TILES {NONE, GROUND, SPIKES, MOVING_PLATFORM}
 var cur_tile = TILES.NONE
 onready var selected_sprite_display = $SelectedSpriteDisplay
 const GROUND_TILE_ID = 1
+var moving_platform_obj = preload("res://Environment/MovingPlatform.tscn")
 var spike_obj = preload("res://Environment/Spikes.tscn")
 var all_spikes_placed = {}
+var all_moving_platforms_placed = {}
+
 var last_x = 9999
 var last_y = 9999
+
+func set_tile_none():
+	cur_tile = TILES.NONE
+	selected_sprite_display.texture = null
+	ground_tile_button.pressed = false
+	spikes_tile_button.pressed = false
+	moving_platform_tile_button.pressed = false
+	
 func select_spikes_tile():
+	if cur_tile == TILES.SPIKES:
+		set_tile_none()
+		return
 	cur_tile = TILES.SPIKES
 	selected_sprite_display.texture = spikes_tile_button.icon
 
 func select_ground_tile():
+	if cur_tile == TILES.GROUND:
+		set_tile_none()
+		return
 	cur_tile = TILES.GROUND
 	selected_sprite_display.texture = ground_tile_button.icon
 
+func select_moving_platform_tile():
+	if cur_tile == TILES.MOVING_PLATFORM:
+		set_tile_none()
+		return
+	cur_tile = TILES.MOVING_PLATFORM
+	selected_sprite_display.texture = moving_platform_tile_button.icon
+
+var grabbed_obj : Node2D
 func _process(delta):
+	if !in_edit_mode:
+		return
+	widget_drawer.draw_widgets()
 	var tilepos_hovering_over = tilemap.world_to_map(get_global_mouse_position())
-	selected_sprite_display.global_position = tilemap.map_to_world(tilepos_hovering_over) + Vector2(8, 8)
+	var snapped_map_pos = tilemap.map_to_world(tilepos_hovering_over) + Vector2(8, 8)
+	selected_sprite_display.global_position = snapped_map_pos
 	var x := int(round(tilepos_hovering_over.x))
 	var y := int(round(tilepos_hovering_over.y))
+	
+	if Input.is_action_just_pressed("place_tile"):
+		for movable in get_tree().get_nodes_in_group("movable_in_editor"):
+			if get_global_mouse_position().distance_squared_to(movable.global_position) < 16 * 16:
+				grabbed_obj = movable
+				grabbed_obj.global_position = snapped_map_pos
+				return
+	
+	if Input.is_action_pressed("place_tile") and is_instance_valid(grabbed_obj):
+		grabbed_obj.global_position = snapped_map_pos
+	
+	if Input.is_action_just_released("place_tile"):
+		grabbed_obj = null
+	
+	if Input.is_action_just_pressed("delete_tile"):
+		for movable in get_tree().get_nodes_in_group("movable_in_editor"):
+			if get_global_mouse_position().distance_squared_to(movable.global_position) < 16 * 16:
+				if movable.get_parent().is_in_group("moving_platforms"):
+					movable.get_parent().queue_free()
+				return
 	if x >= top_left_pos.x and x <= bot_right_pos.x and y >= top_left_pos.y and y <= bot_right_pos.y:
 		if y != last_y or x != last_x:
 			if Input.is_action_pressed("place_tile"):
@@ -94,6 +158,8 @@ func place_tile(x: int, y: int):
 		place_spike(x, y)
 	elif cur_tile == TILES.GROUND:
 		place_ground_tile(x, y)
+	elif cur_tile == TILES.MOVING_PLATFORM:
+		place_moving_platform(x, y)
 	last_x = x
 	last_y = y
 
@@ -107,8 +173,7 @@ func place_spike(x: int, y: int):
 	var right_tile_taken = tilemap.get_cell(x + 1, y) >= 0
 	var top_tile_taken = tilemap.get_cell(x, y - 1) >= 0
 	var bot_tile_taken = tilemap.get_cell(x, y + 1) >= 0
-
-	update()
+	
 	if !bot_tile_taken: # default rotation
 		if left_tile_taken:
 			spike_inst.global_rotation = deg2rad(90)
@@ -117,12 +182,24 @@ func place_spike(x: int, y: int):
 		elif top_tile_taken:
 			spike_inst.global_rotation = deg2rad(180)
 
+func place_moving_platform(x: int, y: int):
+	var moving_platform_inst = moving_platform_obj.instance()
+	all_moving_platforms_placed[get_id_from_coords(x, y)] = moving_platform_inst
+	moving_platform_inst.global_position = tilemap.map_to_world(Vector2(x, y)) + Vector2(8,8)
+	get_tree().get_root().add_child(moving_platform_inst)
+	moving_platform_inst.pause()
+	return moving_platform_inst
+
 func place_ground_tile(x: int, y: int):
 	tilemap.set_cell(x, y, GROUND_TILE_ID)
 	tilemap.update_bitmask_area(Vector2(x, y))
+	if y == to_int(top_left_pos.y):
+		for i in range(8):
+			place_ground_tile(x, y - 1 - i)
 
 func delete_tile(x: int, y: int):
 	tilemap.set_cell(x, y, -1)
+	tilemap.update_bitmask_area(Vector2(x, y))
 	var spike_id = get_id_from_coords(x, y)
 	if spike_id in all_spikes_placed:
 		all_spikes_placed[spike_id].queue_free()
@@ -141,6 +218,7 @@ func clear_map():
 			delete_tile(x, y)
 	for spike_id in all_spikes_placed:
 		all_spikes_placed[spike_id].queue_free()
+	get_tree().call_group("moving_platforms", "queue_free")
 
 func update_saved_levels_list():
 	for child in saved_levels_container.get_children():
@@ -191,8 +269,8 @@ func get_level_data():
 	var end_x = int(round(bot_right_pos.x))
 	var start_y = int(round(top_left_pos.y))
 	var end_y = int(round(bot_right_pos.y))
-	for y in range(start_y, end_y):
-		for x in range(start_x, end_x):
+	for y in range(start_y, end_y+1):
+		for x in range(start_x, end_x+1):
 				if tilemap.get_cell(x, y) >= 0:
 					ground_tiles_data.append({"x" : x, "y" : y})
 	
@@ -200,13 +278,23 @@ func get_level_data():
 	for spike in all_spikes_placed:
 		var data = {}
 		var spike_obj = all_spikes_placed[spike]
-		data.x = to_int(spike_obj.global_position.x)
-		data.y = to_int(spike_obj.global_position.y)
+		var map_pos = tilemap.world_to_map(spike_obj.global_position)
+		data.x = to_int(map_pos.x)
+		data.y = to_int(map_pos.y)
 		spikes_data.append(data)
+	
+	var moving_platforms_data = []
+	for moving_platform in all_moving_platforms_placed:
+		var mp = all_moving_platforms_placed[moving_platform]
+		if is_instance_valid(mp):
+			moving_platforms_data.append(mp._save())
 	
 	var level_data = {
 		"ground_tiles_data" : ground_tiles_data,
 		"spikes_data" : spikes_data,
+		"moving_platforms_data" : moving_platforms_data,
+		"start_point" : {"x": start_point.global_position.x, "y": start_point.global_position.y},
+		"end_point" : {"x": end_point.global_position.x, "y": end_point.global_position.y},
 	}
 	return level_data
 
@@ -235,6 +323,13 @@ func set_level_data(level_data):
 	if "spikes_data" in level_data:
 		for spike_data in level_data.spikes_data:
 			place_spike(spike_data.x, spike_data.y)
+	if "start_point" in level_data:
+		start_point.global_position = Vector2(level_data.start_point.x, level_data.start_point.y)
+	if "end_point" in level_data:
+		end_point.global_position = Vector2(level_data.end_point.x, level_data.end_point.y)
+	if "moving_platforms_data" in level_data:
+		for moving_platform_data in level_data.moving_platforms_data:
+			place_moving_platform(0, 0)._load(moving_platform_data)
 
 func save_file_name_to_path(save_file_name: String):
 	return SAVE_FILES_DIRECTORY + save_file_name + ".level"
@@ -267,3 +362,4 @@ func compare_dates_modified(file_path_a: String, file_path_b: String):
 
 func get_file_name_from_save_file_path(file_path: String):
 	return file_path.get_file().trim_suffix("."+file_path.get_extension())
+

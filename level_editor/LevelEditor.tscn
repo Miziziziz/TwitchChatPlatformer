@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://art/Taiga-Asset-Pack_v2_vnitti/PNG/Middleground.png" type="Texture" id=1]
 [ext_resource path="res://art/Taiga-Asset-Pack_v2_vnitti/PNG/Background.png" type="Texture" id=2]
@@ -13,7 +13,8 @@
 [ext_resource path="res://level_editor/LevelEditor.gd" type="Script" id=11]
 [ext_resource path="res://art/spikes.png" type="Texture" id=12]
 [ext_resource path="res://art/grass.png" type="Texture" id=13]
-[ext_resource path="res://icon.png" type="Texture" id=14]
+[ext_resource path="res://level_editor/WidgetDrawer.gd" type="Script" id=15]
+[ext_resource path="res://art/platform.png" type="Texture" id=16]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
@@ -205,6 +206,8 @@ outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
 
+[sub_resource type="ButtonGroup" id=20]
+
 [sub_resource type="Animation" id=19]
 resource_name = "fade_out"
 tracks/0/type = "value"
@@ -268,6 +271,17 @@ texture = ExtResource( 1 )
 position = Vector2( 616, -52 )
 texture = ExtResource( 1 )
 
+[node name="GreenScreen" type="ColorRect" parent="Background"]
+visible = false
+margin_left = -712.0
+margin_top = -816.0
+margin_right = 616.0
+margin_bottom = 256.0
+color = Color( 0, 0, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="World" type="Node" parent="."]
 script = ExtResource( 10 )
 __meta__ = {
@@ -306,23 +320,26 @@ position = Vector2( 24, 8 )
 [node name="BotRight" type="Node2D" parent="TileMap"]
 position = Vector2( 1000, 520 )
 
-[node name="StartPoint" type="Node2D" parent="."]
-position = Vector2( 64, 492 )
+[node name="StartPoint" type="Node2D" parent="." groups=[
+"movable_in_editor",
+]]
+position = Vector2( 632, 376 )
 
 [node name="Label" type="Label" parent="StartPoint"]
 self_modulate = Color( 0, 1, 0.952941, 1 )
 margin_left = -32.0
-margin_top = 32.0
 margin_right = 21.0
-margin_bottom = 61.0
+margin_bottom = 29.0
 custom_fonts/font = SubResource( 18 )
 text = "Start"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="EndPoint" type="Node2D" parent="."]
-position = Vector2( 984, 104 )
+[node name="EndPoint" type="Node2D" parent="." groups=[
+"movable_in_editor",
+]]
+position = Vector2( 696, 376 )
 
 [node name="Label" type="Label" parent="EndPoint"]
 self_modulate = Color( 0.901961, 0.92549, 0.129412, 1 )
@@ -349,10 +366,14 @@ current = true
 [node name="EditorUI" type="CanvasLayer" parent="."]
 
 [node name="TilePalette" type="Control" parent="EditorUI"]
-margin_left = 896.798
-margin_top = 550.521
-margin_right = 936.798
-margin_bottom = 590.521
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 376.0
+margin_top = -48.0
+margin_right = 416.0
+margin_bottom = -8.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -373,7 +394,7 @@ margin_top = 9.1344
 margin_right = 40.0
 margin_bottom = 49.1344
 rect_scale = Vector2( 1.5, 1.5 )
-columns = 2
+columns = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -381,19 +402,35 @@ __meta__ = {
 [node name="GroundTile" type="Button" parent="EditorUI/TilePalette/GridContainer"]
 margin_right = 28.0
 margin_bottom = 22.0
+toggle_mode = true
+group = SubResource( 20 )
 icon = ExtResource( 13 )
 
 [node name="SpikesTile" type="Button" parent="EditorUI/TilePalette/GridContainer"]
 margin_left = 32.0
 margin_right = 60.0
 margin_bottom = 22.0
+toggle_mode = true
+group = SubResource( 20 )
 icon = ExtResource( 12 )
 
+[node name="MovingPlatformTile" type="Button" parent="EditorUI/TilePalette/GridContainer"]
+margin_left = 64.0
+margin_right = 92.0
+margin_bottom = 22.0
+toggle_mode = true
+group = SubResource( 20 )
+icon = ExtResource( 16 )
+
 [node name="CommandInput" type="LineEdit" parent="EditorUI"]
-margin_left = 740.2
-margin_top = 566.0
-margin_right = 892.2
-margin_bottom = 590.0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 232.0
+margin_top = -32.0
+margin_right = 364.0
+margin_bottom = -8.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -548,21 +585,28 @@ margin_bottom = 24.0
 placeholder_text = "Enter level name..."
 
 [node name="PlayButton" type="Button" parent="EditorUI"]
-margin_left = 619.384
-margin_top = 568.0
-margin_right = 734.384
-margin_bottom = 588.0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 104.0
+margin_top = -32.0
+margin_right = 219.0
+margin_bottom = -12.0
 text = "Enter Play Mode"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="StopPlayButton" type="Button" parent="EditorUI"]
-visible = false
-margin_left = 536.0
-margin_top = 568.0
-margin_right = 649.0
-margin_bottom = 588.0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 105.0
+margin_top = -32.0
+margin_right = 218.0
+margin_bottom = -12.0
 text = "Exit Play Mode"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -573,10 +617,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -70.8598
-margin_top = -32.2704
-margin_right = 100.14
-margin_bottom = -12.2704
+margin_left = -72.0
+margin_top = -32.0
+margin_right = 99.0
+margin_bottom = -12.0
 text = "load level from clipboard"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -587,42 +631,73 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -63.8598
-margin_top = -59.1708
-margin_right = 93.1402
-margin_bottom = -39.1708
+margin_left = -65.155
+margin_top = -57.1958
+margin_right = 91.845
+margin_bottom = -37.1958
 text = "copy level to clipboard"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="BackgroundButtons" type="Control" parent="EditorUI"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 136.0
+margin_top = -64.0
+margin_right = 176.0
+margin_bottom = -24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GreenScreenButton" type="Button" parent="EditorUI/BackgroundButtons"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -49.0
+margin_top = -10.0
+margin_right = 49.0
+margin_bottom = 10.0
+text = "Blue Screen"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NormalScreenButton" type="Button" parent="EditorUI/BackgroundButtons"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.0
+margin_top = -10.0
+margin_right = 53.0
+margin_bottom = 10.0
+text = "Normal Screen"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="SelectedSpriteDisplay" type="Sprite" parent="."]
+self_modulate = Color( 1, 1, 1, 0.458824 )
 
-[node name="Debug" type="Sprite" parent="."]
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 14 )
-
-[node name="Debug2" type="Sprite" parent="."]
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 14 )
-
-[node name="Debug3" type="Sprite" parent="."]
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 14 )
-
-[node name="Debug4" type="Sprite" parent="."]
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 14 )
+[node name="WidgetDrawer" type="Node2D" parent="."]
+z_index = 3
+script = ExtResource( 15 )
 [connection signal="button_up" from="EditorUI/ClearButton" to="EditorUI/ClearButton/ConfirmDialog" method="show"]
 [connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/ConfirmClearButton" to="EditorUI/ClearButton/ConfirmDialog" method="hide"]
 [connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/ConfirmClearButton" to="." method="clear_map"]
 [connection signal="button_up" from="EditorUI/ClearButton/ConfirmDialog/DontClear" to="EditorUI/ClearButton/ConfirmDialog" method="hide"]
-[connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/Panel" method="hide"]
 [connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/HideButton" method="hide"]
 [connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/ShowButton" method="show"]
-[connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/Panel" method="show"]
+[connection signal="button_up" from="EditorUI/LoadLevels/HideButton" to="EditorUI/LoadLevels/Panel" method="hide"]
 [connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/HideButton" method="show"]
 [connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/ShowButton" method="hide"]
+[connection signal="button_up" from="EditorUI/LoadLevels/ShowButton" to="EditorUI/LoadLevels/Panel" method="show"]
 [connection signal="button_up" from="EditorUI/SaveButton" to="." method="attempt_save"]
 [connection signal="button_up" from="EditorUI/SaveButton/ConfirmOverwrite/Overwrite" to="EditorUI/SaveButton/ConfirmOverwrite" method="hide"]
 [connection signal="button_up" from="EditorUI/SaveButton/ConfirmOverwrite/Overwrite" to="." method="force_save"]
@@ -631,5 +706,11 @@ texture = ExtResource( 14 )
 [connection signal="button_up" from="EditorUI/StopPlayButton" to="." method="set_edit_mode"]
 [connection signal="button_up" from="EditorUI/LoadFromClipBoardButton" to="." method="load_level_from_clipboard"]
 [connection signal="button_up" from="EditorUI/CopyToClipBoardButton2" to="." method="copy_level_data_to_clipboard"]
+[connection signal="button_up" from="EditorUI/BackgroundButtons/GreenScreenButton" to="EditorUI/BackgroundButtons/GreenScreenButton" method="hide"]
+[connection signal="button_up" from="EditorUI/BackgroundButtons/GreenScreenButton" to="Background/GreenScreen" method="show"]
+[connection signal="button_up" from="EditorUI/BackgroundButtons/GreenScreenButton" to="EditorUI/BackgroundButtons/NormalScreenButton" method="show"]
+[connection signal="button_up" from="EditorUI/BackgroundButtons/NormalScreenButton" to="EditorUI/BackgroundButtons/GreenScreenButton" method="show"]
+[connection signal="button_up" from="EditorUI/BackgroundButtons/NormalScreenButton" to="Background/GreenScreen" method="hide"]
+[connection signal="button_up" from="EditorUI/BackgroundButtons/NormalScreenButton" to="EditorUI/BackgroundButtons/NormalScreenButton" method="hide"]
 
 [editable path="World/CanvasLayer"]

@@ -11,4 +11,5 @@ func inc_time():
 
 func reset():
 	cur_time = 0
+	get_tree().call_group("timed", "update_time", cur_time)
 	$Timer.start()

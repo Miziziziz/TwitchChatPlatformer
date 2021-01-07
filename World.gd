@@ -10,8 +10,10 @@ onready var player_counter = $CanvasLayer/PlayerCounter
 onready var player_died_display = $CanvasLayer/DeathDisplay
 func _ready() -> void:
 	ClockManager.reset()
+	update_player_list()
 	connect("cmd_no_permission", self, "no_permission")
 	connect("chat_message", self, "parse_chat_data")
+	connect("whisper_message", self, "parse_chat_data")
 	connect_to_twitch()
 	yield(self, "twitch_connected")
 	

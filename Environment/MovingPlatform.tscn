@@ -6,36 +6,40 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24, 8 )
 
-[node name="MovingPlatform" type="KinematicBody2D" groups=[
+[node name="MovingPlatform" type="Node2D" groups=[
+"moving_platforms",
 "timed",
 ]]
 script = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="EndPos" type="Position2D" parent="." groups=[
+"movable_in_editor",
+]]
+position = Vector2( 128, 0 )
+
+[node name="Platform" type="KinematicBody2D" parent="." groups=[
+"movable_in_editor",
+]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
 shape = SubResource( 1 )
 
-[node name="StartPos" type="Position2D" parent="."]
-position = Vector2( -64, 0 )
+[node name="Graphics" type="Node2D" parent="Platform"]
 
-[node name="EndPos" type="Position2D" parent="."]
-position = Vector2( 64, 0 )
-
-[node name="Graphics" type="Node2D" parent="."]
-
-[node name="Sprite" type="Sprite" parent="Graphics"]
+[node name="Sprite" type="Sprite" parent="Platform/Graphics"]
 rotation = 1.57079
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 16, 48, 16, 16 )
 
-[node name="Sprite2" type="Sprite" parent="Graphics"]
+[node name="Sprite2" type="Sprite" parent="Platform/Graphics"]
 position = Vector2( 16, 0 )
 rotation = 1.57079
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 16, 48, 16, 16 )
 
-[node name="Sprite3" type="Sprite" parent="Graphics"]
+[node name="Sprite3" type="Sprite" parent="Platform/Graphics"]
 position = Vector2( -16, 0 )
 rotation = 1.57079
 texture = ExtResource( 1 )
